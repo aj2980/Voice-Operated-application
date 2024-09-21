@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Generated Voice Detector</title>
+</head>
+<body>
+    <h1>Upload Audio File</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <label for="file">Select audio File:</label>
+        <input type="file" id="file" name="file" accept="audio/*" required>
+        <button type="submit">Upload</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const response = await fetch('http://localhost:5000/upload', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            document.getElementById('result').innerText = `Result: ${result.result * 100}% likely to be AI generated`;
+            if (result.audio_file) {
+                document.getElementById('result').innerHTML += `<audio controls src="${result.audio_file}">Your browser does not support the audio element.</audio>`;
+            }
+        });
+    </script>
+</body>
+</html>
