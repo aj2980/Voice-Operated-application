@@ -6,7 +6,7 @@ from flask import Flask, request, jsonify, send_from_directory
 from transformers import Wav2Vec2ForSequenceClassification, Wav2Vec2Processor
 from flask_cors import CORS
 
-app = Flask(__name__, static_folder='static')
+app = Flask(__name__, static_folder='views')
 CORS(app)  # Enable CORS
 
 # Load the model and processor
@@ -53,15 +53,15 @@ def upload_audio():
     result = classify_audio_clip(audio_clip)
     print(f"Classification result: {result}")  # Debugging output
 
-    return jsonify({"result": result, "audio_file": f"/uploads/{file.filename}"})
+    return jsonify({"result": result})
 
 @app.route('/uploads/<path:filename>')
 def serve_uploaded_file(filename):
     return send_from_directory('uploads', filename)
 
-@app.route('/')
-def serve_static_index():
-    return send_from_directory(app.static_folder, 'index.html')
+# @app.route('/')
+# def serve_static_index():
+#     return send_from_directory(app.static_folder, 'index.html')
 
 if __name__ == "__main__":
     app.run(port=5000)
