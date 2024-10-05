@@ -5,16 +5,51 @@ const multer = require('multer');
 const fs = require('fs');
 const FormData = require('form-data');  // Used to send files to Flask
 const fetch = require('node-fetch');    // For making HTTP requests to Flask
-const { exec } = require('child_process');
+const { exec  } = require('child_process');
 const http = require('http');
 const ejsMate=require('ejs-mate');
+const flash = require('connect-flash');
+const session = require('express-session');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const mongoose=require('mongoose');
+const User=require('./models/user');
+const userRoutes=require('./routes/users')
 
+mongoose.connect('mongodb://127.0.0.1:27017/voiceoperation');
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error:"));
+db.once("open", () => {
+    console.log("Database connected");
+});
 
 app.engine('ejs',ejsMate);
 app.set('view engine', 'ejs');
+app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true }));
 app.set('views', path.join(__dirname, 'views'));  // Make sure views directory is properly set
-
 const upload = multer({ dest: 'uploads/' });
+app.use(flash());
+
+const sessionConfig = {
+    name:'session',
+    secret: 'thisshouldbeabettersecret!',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+    }
+}
+app.use(session(sessionConfig))
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+// above line tell the passport to use the localstrategy of username nd password and use authentiction mehtod defined in the user module defined by passport-local-mongoose
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // Function to check if Flask is running
 function isFlaskRunning(callback) {
@@ -84,6 +119,7 @@ app.get('/book',(req,res)=>{
     res.render('book')
 })
 
+app.use('/',userRoutes);
 app.listen(3000, () => {
     console.log('Express server running at http://localhost:3000');
 });
