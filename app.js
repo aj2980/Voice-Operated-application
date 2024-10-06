@@ -14,7 +14,9 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const mongoose=require('mongoose');
 const User=require('./models/user');
-const userRoutes=require('./routes/users')
+const userRoutes=require('./routes/users');
+const BookingRoutes=require('./routes/book')
+const { isLoggedIn } = require('./middleware');
 
 mongoose.connect('mongodb://127.0.0.1:27017/voiceoperation');
 const db = mongoose.connection;
@@ -115,10 +117,9 @@ app.post('/upload', upload.single('file'), (req, res) => {
         });
     });
 });
-app.get('/book',(req,res)=>{
+app.get('/book',isLoggedIn,(req,res)=>{
     res.render('book')
 })
-
 app.use('/',userRoutes);
 app.listen(3000, () => {
     console.log('Express server running at http://localhost:3000');
