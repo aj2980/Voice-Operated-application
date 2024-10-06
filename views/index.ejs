@@ -62,5 +62,31 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
         integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
         crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/annyang@2.6.1/dist/annyang.min.js"></script>
+
+    <script>
+          if (annyang) {
+            // Define commands for navigation
+            var navigationCommands = {
+              'go to home': function() {
+                window.location.href = '/';
+              },
+              'go to booking':function() {
+                window.location.href='/book';
+              },
+              'go to login':function() {
+                window.location.href='/login';
+              },
+              'go to register':function() {
+                window.location.href='/register';
+              },
+              'logout': function() {
+                Window.location.href='/logout';
+              }
+            };
+            annyang.addCommands(navigationCommands);
+            annyang.start();
+          }
+    </script>
 </body>
 </html>

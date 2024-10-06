@@ -18,3 +18,30 @@
       </div>
     </div>
   </nav>
+
+  <script src="https://cdn.jsdelivr.net/npm/annyang@2.6.1/dist/annyang.min.js"></script>
+
+  <script>
+    if (annyang) {
+      // Define commands for navigation
+      var navigationCommands = {
+        'go to home': function() {
+          window.location.href = '/';
+        },
+        'go to booking':function() {
+          window.location.href='/book';
+        },
+        'go to login':function() {
+          window.location.href='/login';
+        },
+        'go to register':function() {
+          window.location.href='/register';
+        },
+        'logout': function() {
+          Window.location.href='/logout';
+        }
+      };
+      annyang.addCommands(navigationCommands);
+      annyang.start();
+    }
+</script>
