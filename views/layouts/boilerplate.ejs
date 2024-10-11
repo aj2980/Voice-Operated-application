@@ -22,5 +22,71 @@
     integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
     crossorigin="anonymous"></script>
     <script src="/javascripts/validateForms.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/annyang@2.6.1/dist/annyang.min.js"></script>
+    <script>
+    function speak(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    window.speechSynthesis.speak(utterance);
+}
+
+if (annyang) {
+    // Define commands to fill the form fields and give voice feedback
+    var navigationCommands = {
+        'go to home': function() {
+          window.location.href = '/';
+        },
+        'go to booking':function() {
+          window.location.href='/book';
+        },
+        'go to login':function() {
+          window.location.href='/login';
+        },
+        'go to register':function() {
+          window.location.href='/register';
+        },
+        'logout': function() {
+          Window.location.href='/logout';
+        }
+      };
+    var commands = {
+        'set username to *name': function(name) {
+            document.getElementById('username').value = name;
+            speak('Username set to ' + name);  // Voice feedback
+        },
+        'set password to *password':function(password){
+            document.gwetElementById('password').value=password;
+            speak('password set'); 
+        },
+        'submit form': function() {
+            document.getElementById('loginForm').submit();
+            speak('You are Logined Succesfully');  // Voice feedback
+        }
+    };
+    var registercommands = {
+        'set username to *name': function(name) {
+            document.getElementById('username').value = name;
+            speak('Username set to ' + name);  // Voice feedback
+        },
+        'set email to *email': function(email) {
+            document.getElementById('email').value = email;
+            speak('Email set to ' + email);  // Voice feedback
+        },
+        'set password to *password': function(password) {
+            document.getElementById('password').value = password;
+            speak('Password set to ' + password);  // Voice feedback
+        },
+        'submit registration form': function() {
+            document.getElementById('registerForm').submit();
+            speak('Registration form submitted');  // Voice feedback
+        }
+    };
+    annyang.addCommands(commands);
+    annyang.addCommands(navigationCommands);
+    annyang.addCommands(registercommands);
+    annyang.start();
+} else {
+console.log('annyang not supported in this browser');
+}
+    </script>
 </body>
 </html>

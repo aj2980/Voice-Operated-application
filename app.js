@@ -27,7 +27,7 @@ db.once("open", () => {
 
 app.engine('ejs',ejsMate);
 app.set('view engine', 'ejs');
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.set('views', path.join(__dirname, 'views'));  // Make sure views directory is properly set
 const upload = multer({ dest: 'uploads/' });
