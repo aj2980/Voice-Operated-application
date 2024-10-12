@@ -21,7 +21,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
     integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
     crossorigin="anonymous"></script>
-    <script src="/javascripts/validateForms.js"></script>
+    <!-- <script src="/javascripts/validateForms.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/annyang@2.6.1/dist/annyang.min.js"></script>
     <script>
     function speak(text) {
@@ -49,15 +49,15 @@ if (annyang) {
         }
       };
     var commands = {
-        'set username to *name': function(name) {
-            document.getElementById('username').value = name;
-            speak('Username set to ' + name);  // Voice feedback
+        'Login name is *n': function(n) {
+            document.getElementById('username').value = n;
+            speak('Username set to ' + n);  // Voice feedback
         },
-        'set password to *password':function(password){
-            document.gwetElementById('password').value=password;
+        'My password is *p':function(p){
+            document.getElementById('password').value=p;
             speak('password set'); 
         },
-        'submit form': function() {
+        'Login': function() {
             document.getElementById('loginForm').submit();
             speak('You are Logined Succesfully');  // Voice feedback
         }
@@ -65,6 +65,7 @@ if (annyang) {
     var registercommands = {
         'set username to *name': function(name) {
             document.getElementById('username').value = name;
+            console.log(name);
             speak('Username set to ' + name);  // Voice feedback
         },
         'set email to *email': function(email) {
