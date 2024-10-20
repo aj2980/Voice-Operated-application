@@ -1,4 +1,4 @@
-const express = require('express');
+ const express = require('express');
 const app = express();
 const path = require('path');
 const multer = require('multer');
@@ -6,6 +6,7 @@ const fs = require('fs');
 const FormData = require('form-data');  // Used to send files to Flask
 const fetch = require('node-fetch');    // For making HTTP requests to Flask
 const { exec  } = require('child_process');
+const { spawn } = require('child_process');
 const http = require('http');
 const ejsMate=require('ejs-mate');
 const flash = require('connect-flash');
@@ -62,16 +63,28 @@ function isFlaskRunning(callback) {
     });
 }
 
-// Function to start Flask server
 function startFlaskServer() {
     return new Promise((resolve, reject) => {
-        exec('python app.py', (error, stdout, stderr) => {
-            if (error) {
-                console.error(`Error starting Flask: ${error.message}`);
-                reject(error);
+        const flaskProcess = spawn('python', ['app.py']);
+
+        flaskProcess.stdout.on('data', (data) => {
+            console.log(`Flask stdout: ${data}`);
+            if (data.includes("Running on http://127.0.0.1:5000/")) {
+                resolve();
             }
-            console.log(`Flask server started`);
-            resolve();
+        });
+
+        flaskProcess.stderr.on('data', (data) => {
+            console.error(`Flask stderr: ${data}`);
+        });
+
+        flaskProcess.on('error', (error) => {
+            console.error(`Error starting Flask: ${error.message}`);
+            reject(error);
+        });
+
+        flaskProcess.on('close', (code) => {
+            console.log(`Flask process exited with code ${code}`);
         });
     });
 }
@@ -81,6 +94,8 @@ app.get('/', (req, res) => {
     res.render('index');  // This will render index.ejs from the views directory
 });
 
+// Handle file uploads and interact with Flask
+// Handle file uploads and interact with Flask
 // Handle file uploads and interact with Flask
 app.post('/upload', upload.single('file'), (req, res) => {
     const file = req.file;
@@ -94,6 +109,9 @@ app.post('/upload', upload.single('file'), (req, res) => {
         if (!isRunning) {
             console.log('Flask is not running. Starting Flask...');
             await startFlaskServer();  // Start Flask if not running
+
+            // Add a delay to give Flask some time to start
+            await new Promise(resolve => setTimeout(resolve, 5000));  // Wait for 5 seconds
         }
 
         // Prepare FormData for sending the file to Flask
@@ -117,6 +135,8 @@ app.post('/upload', upload.single('file'), (req, res) => {
         });
     });
 });
+
+
 app.get('/book',isLoggedIn,(req,res)=>{
     res.render('book')
 })
