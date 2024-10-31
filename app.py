@@ -8,7 +8,6 @@ from flask_cors import CORS
 
 app = Flask(__name__, static_folder='views')
 CORS(app)  # Enable CORS
-# akshat ki jai hoooo
 # Load the model and processor
 model_name = "facebook/wav2vec2-large-960h"
 model = Wav2Vec2ForSequenceClassification.from_pretrained(model_name)

@@ -18,6 +18,7 @@ const User=require('./models/user');
 const userRoutes=require('./routes/users');
 const BookingRoutes=require('./routes/book')
 const { isLoggedIn } = require('./middleware');
+const Train=require('./models/train');
 
 mongoose.connect('mongodb://127.0.0.1:27017/voiceoperation');
 const db = mongoose.connection;
@@ -92,6 +93,20 @@ function startFlaskServer() {
 // Serve the EJS index page
 app.get('/', (req, res) => {
     res.render('index');  // This will render index.ejs from the views directory
+});
+
+app.post('/book',async (req,res)=>{
+    try {
+        const {to,from,date}=req.body;
+        const trains=await Train.find({
+            'properties.from_station_name':from,
+            'properties.to_station_name':to,
+        });
+        res.render('train/details', { trains, date });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server Error');
+    }
 });
 
 // Handle file uploads and interact with Flask

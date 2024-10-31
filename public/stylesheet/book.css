@@ -1,0 +1,31 @@
+.container {
+    width: 60%;
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+h2 {
+    text-align: center;
+    color: #333;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+.form-group label {
+    font-weight: 600;
+    color: #555;
+}
+.form-control, .btn-primary, .form-select {
+    font-size: 16px;
+    padding: 10px;
+    margin-top: 5px;
+}
+.btn-primary {
+    width: 100%;
+    background-color: #007bff;
+    border: none;
+}
+.btn-primary:hover {
+    background-color: #0056b3;
+}
