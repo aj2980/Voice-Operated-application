@@ -1,7 +1,5 @@
 const mongoose=require('mongoose')
 const traind=require('./mp')
-const obj=require('./output')
-const ftrain=JSON.parse(obj)
 const Train=require('../models/train');
 
 mongoose.connect('mongodb://127.0.0.1:27017/voiceoperation');
@@ -17,7 +15,7 @@ const seedDB = async () => {
   await Train.deleteMany({});
   
   // Insert new train data from train.js
-  await Train.insertMany(ftrain);
+  await Train.insertMany(traind);
 
   console.log('Train data uploaded');
 };

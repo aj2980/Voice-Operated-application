@@ -31,6 +31,12 @@
 
 if (annyang) {
     // Define commands to fill the form fields and give voice feedback
+    const stationMapping = {
+        'bhopal': 'BHOPAL JN',
+        'indore': 'INDORE JN',
+        'jabalpur': 'JABALPUR',
+        // Add more mappings as needed
+    };
     var navigationCommands = {
         'go to home': function() {
           window.location.href = '/';
@@ -81,9 +87,50 @@ if (annyang) {
             speak('Registration form submitted');  // Voice feedback
         }
     };
+    const bookingCommands = {
+        'set from station to *fromStation': function(fromStation) {
+            const standardizedFrom = stationMapping[fromStation.toLowerCase()];
+            if (standardizedFrom) {
+                document.getElementById('from').value = standardizedFrom;
+                speak(`From station set to ${standardizedFrom}`);
+            } else {
+                speak(`Sorry, I did not recognize the station "${fromStation}". Please specify again.`);
+            }
+        },
+        'set to station to *toStation': function(toStation) {
+            const standardizedTo = stationMapping[toStation.toLowerCase()];
+            if (standardizedTo) {
+                document.getElementById('to').value = standardizedTo;
+                speak(`To station set to ${standardizedTo}`);
+            } else {
+                speak(`Sorry, I did not recognize the station "${toStation}". Please specify again.`);
+            }
+        },
+        'set date to *date': function(date) {
+            document.getElementById('date').value = date;
+            speak(`Date set to ${date}`);
+        },
+        'set class preference to *preference': function(preference) {
+            const classMapping = {
+                'first AC': '1A',
+                'second AC': '2A',
+                'third AC': '3A',
+                'sleeper': 'SL',
+                'chair car': 'CC',
+                'all classes': ''
+            };
+            document.getElementById('preference').value = classMapping[preference.toLowerCase()] || '';
+            speak(`Class preference set to ${preference}`);
+        },
+        'submit booking form': function() {
+            document.querySelector('form').submit();
+            speak('Booking form submitted');
+        }
+    };
     annyang.addCommands(commands);
     annyang.addCommands(navigationCommands);
     annyang.addCommands(registercommands);
+    annyang.addCommands(bookingCommands);
     annyang.start();
 } else {
 console.log('annyang not supported in this browser');

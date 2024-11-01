@@ -41,9 +41,9 @@
             <a href="./book" class="btn btn-lg btn-secondary font-weight-bold border-white bg-white">book</a>
         </main>
     </div>
-
     <script>
         // Function to start recording from the microphone for 10 seconds
+            // Reload the page only once per session
         async function startRecording() {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -65,7 +65,16 @@
                         body: formData
                     });
                     const result = await response.json();
-                    document.getElementById('result').innerText = `Result: ${result.result * 100}% likely to be AI generated`;
+                    const re=document.getElementById('result');
+                    const likelihood = result.result * 100; // Convert to percentage
+                    re.innerText = `Result: ${likelihood}% likely to be AI generated`;
+
+                    // Redirect to /book only if likelihood is less than 50%
+                    if (likelihood < 50) {
+                        setTimeout(() => {
+                            window.location.href = '/book'; // Redirect to the book page
+                        }, 2000); // 2 seconds delay
+                    }
                 };
 
                 // Start recording
@@ -127,5 +136,6 @@ console.log('annyang not supported in this browser');
         integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
         crossorigin="anonymous"></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/annyang@2.6.1/dist/annyang.min.js"></script> -->
+     
 </body>
 </html>
