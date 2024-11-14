@@ -24,7 +24,7 @@ const BookingRoutes = require('./routes/book');
 const { isLoggedIn } = require('./middleware');
 const Train = require('./models/train');
 const MongoDBStore = require("connect-mongo");
-const dbUrl = process.env.DB_URL||'mongodb://localhost:27017/voiceoperation';
+const dbUrl = process.env.DB_URL;
 mongoose.connect(dbUrl, { ssl: true,tlsInsecure: true});
 
 mongoose.connect(dbUrl);
