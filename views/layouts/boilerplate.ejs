@@ -97,7 +97,7 @@ if (annyang) {
                 speak(`Sorry, I did not recognize the station "${fromStation}". Please specify again.`);
             }
         },
-        'set to station to *toStation': function(toStation) {
+        'set destination to *toStation': function(toStation) {
             const standardizedTo = stationMapping[toStation.toLowerCase()];
             if (standardizedTo) {
                 document.getElementById('to').value = standardizedTo;

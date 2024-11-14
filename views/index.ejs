@@ -8,34 +8,22 @@
     integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
     <link rel="stylesheet" href="/stylesheet/indexx.css">
 </head>
-<body class="d-flex text-center text-white bg-dark">
+<body class="d-flex flex-column vh-100 text-center text-white bg-dark">
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">Navbar</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <div class="navbar-nav">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
-                        <a class="nav-link" href="/book">book</a>
-                        <a class="nav-link" href="#">Pricing</a>
-                    </div>
-                    <div class="navbar-nav ml-auto">
-                        <a class="nav-link active" aria-current="page" href="/login">Login</a>
-                        <a class="nav-link" href="/register">Register</a>
-                        <a class="nav-link" href="/logout">Logout</a>
-                    </div>
-                </div>
+        <header class="mb-5">
+            <div>
+                <h3 class="float-md-left mb-0">RailINDIA</h3>
+                <nav class="nav nav-masthead justify-content-center float-md-right">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <a class="nav-link" href="/book">Booking</a>
+                    <a class="nav-link" href="/login">Login</a>
+                    <a class="nav-link" href="/register">Register</a>
+                    <a class="nav-link" href="/logout">Logout</a>
+                </nav>
             </div>
-        </nav>
-        
-        <h1>Recording live audio for 10 seconds...</h1>
-        <p>Check back for results after recording completes.</p>
-        <div id="result"></div>
-
-        <main class="px-3">
+        </header>
+        <!-- <div id="result"></div> -->
+        <main class="px-3 mt-5">
             <h1>YelpCamp</h1>
             <p class="lead">Welcome to Indian Railway! <br> Jump right in and explore our many places.<br>Feel free to share some of your own and comment on others!</p>
             <a href="./book" class="btn btn-lg btn-secondary font-weight-bold border-white bg-white">book</a>
