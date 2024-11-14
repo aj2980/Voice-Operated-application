@@ -57,11 +57,15 @@ if (annyang) {
     var commands = {
         'Login name is *n': function(n) {
             document.getElementById('username').value = n;
-            speak('Username set to ' + n);  // Voice feedback
+            console.log("login name is set")
+            speak('Username set to ' + n);
+            console.log("next field is spoken")
+            speak("what's the password")  // Voice feedback
         },
         'My password is *p':function(p){
             document.getElementById('password').value=p;
-            speak('password set'); 
+            speak('password set');
+            speak("submit the form") 
         },
         'Login': function() {
             document.getElementById('loginForm').submit();
@@ -132,6 +136,16 @@ if (annyang) {
     annyang.addCommands(registercommands);
     annyang.addCommands(bookingCommands);
     annyang.start();
+    window.onload = () => { 
+        const path = window.location.pathname;
+        if (path === '/login') {
+            console.log("Login page is loaded");
+            speak("What is your login name?");
+        } else if (path === '/register') {
+            console.log("Register page is loaded");
+            speak("What is your username?");
+        }
+    };
 } else {
 console.log('annyang not supported in this browser');
 }

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Generated Voice Detector</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
-    integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+          integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
     <link rel="stylesheet" href="/stylesheet/indexx.css">
 </head>
 <body class="d-flex flex-column vh-100 text-center text-white bg-dark">
@@ -22,18 +22,32 @@
                 </nav>
             </div>
         </header>
-        <!-- <div id="result"></div> -->
+
         <main class="px-3 mt-5">
             <h1>YelpCamp</h1>
             <p class="lead">Welcome to Indian Railway! <br> Jump right in and explore our many places.<br>Feel free to share some of your own and comment on others!</p>
-            <a href="./book" class="btn btn-lg btn-secondary font-weight-bold border-white bg-white">book</a>
+            <a href="./book" class="btn btn-lg btn-secondary font-weight-bold border-white bg-white">Book</a>
         </main>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/annyang@2.6.1/dist/annyang.min.js"></script>
     <script>
-        // Function to start recording from the microphone for 10 seconds
-            // Reload the page only once per session
-        async function startRecording() {
+        // Function to start recording after starting the Flask server
+        function speak(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    window.speechSynthesis.speak(utterance);
+}
+        async function startRecordingWithFlask() {
             try {
+                // Check if Flask is running; if not, start it
+                const flaskStatus = await fetch('/check-flask');
+                if (flaskStatus.status !== 200) {
+                    await fetch('/start-flask');
+                    console.log("Starting Flask server...");
+                    await new Promise(resolve => setTimeout(resolve, 5000));  // Delay for Flask to start
+                }
+
+                // Start recording audio
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 const mediaRecorder = new MediaRecorder(stream);
                 const audioChunks = [];
@@ -53,77 +67,50 @@
                         body: formData
                     });
                     const result = await response.json();
-                    const re=document.getElementById('result');
-                    const likelihood = result.result * 100; // Convert to percentage
-                    re.innerText = `Result: ${likelihood}% likely to be AI generated`;
+                    const likelihood = result.result * 100;
+                    alert(`Result: ${likelihood}% likely to be AI generated`);
 
-                    // Redirect to /book only if likelihood is less than 50%
                     if (likelihood < 50) {
                         setTimeout(() => {
-                            window.location.href = '/book'; // Redirect to the book page
-                        }, 2000); // 2 seconds delay
+                            window.location.href = '/book';
+                        }, 2000);  // Redirect to the book page after a delay
                     }
                 };
 
-                // Start recording
                 mediaRecorder.start();
                 console.log("Recording started...");
-
-                // Stop recording after 10 seconds
-                setTimeout(() => {
-                    mediaRecorder.stop();
-                    console.log("Recording stopped.");
-                }, 10000);  // Stop after 10 seconds
-
+                setTimeout(() => mediaRecorder.stop(), 10000);  // Stop recording after 10 seconds
             } catch (error) {
-                console.error("Error accessing microphone:", error);
+                console.error("Error accessing microphone or Flask server:", error);
             }
         }
 
-        // Start recording when the page loads
-        window.onload = function() {
-            startRecording();
-        };
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/annyang@2.6.1/dist/annyang.min.js"></script>
-    <script>
-    function speak(text) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    window.speechSynthesis.speak(utterance);
-}
-
-if (annyang) {
-    // Define commands to fill the form fields and give voice feedback
-    var navigationCommands = {
-        'go to home': function() {
-          window.location.href = '/';
-        },
-        'go to booking':function() {
-          window.location.href='/book';
-        },
-        'go to login':function() {
-          window.location.href='/login';
-        },
-        'go to register':function() {
-          window.location.href='/register';
-        },
-        'logout': function() {
-          Window.location.href='/logout';
+        // Set up Annyang voice commands
+        if (annyang) {
+            const commands = {
+                'start recording': startRecordingWithFlask,
+                'go to home': () => window.location.href = '/',
+                'go to booking': () => window.location.href = '/book',
+                'go to login': () => window.location.href = '/login',
+                'go to register': () => window.location.href = '/register',
+                'logout': () => window.location.href = '/logout'
+            };
+            annyang.addCommands(commands);
+            annyang.start();
+            window.onload = () => { 
+                speak("tell when u want to start recording");
+    };
         }
-      };
-    annyang.addCommands(navigationCommands);
-    annyang.start();
-} else {
-console.log('annyang not supported in this browser');
-}
+        else {
+            console.log('Annyang not supported in this browser.');
+        }
     </script>
+
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
-        integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
-        crossorigin="anonymous"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/annyang@2.6.1/dist/annyang.min.js"></script> -->
-     
+            integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
+            crossorigin="anonymous"></script>
 </body>
 </html>
