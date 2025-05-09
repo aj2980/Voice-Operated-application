@@ -1,120 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Voice-Enabled Website</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
-    integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
-    <script  crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
-    <script crossorigin="anonymous" src="https://cdn.maptiler.com/maptiler-sdk-js/v2.0.3/maptiler-sdk.umd.min.js"></script>
-    <link crossorigin="anonymous" href="https://cdn.maptiler.com/maptiler-sdk-js/v2.0.3/maptiler-sdk.css" rel="stylesheet">
-</head>
-<body class=" d-flex flex-column vh-100">
-    <%- include('../partials/navbar')%>
-    <main class="container mt-5">
-    <%-body%>
-    </main>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-    crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
-    integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
-    crossorigin="anonymous"></script>
-    <!-- <script src="/javascripts/validateForms.js"></script> -->
+        integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/annyang@2.6.1/dist/annyang.min.js"></script>
-    <script>
-    function speak(text) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    window.speechSynthesis.speak(utterance);
-}
+</head>
 
-if (annyang) {
-    // Define commands to fill the form fields and give voice feedback
-    const stationMapping = {
-        'bhopal': 'BHOPAL JN',
-        'indore': 'INDORE JN',
-        'jabalpur': 'JABALPUR',
-        // Add more mappings as needed
-    };
-    var navigationCommands = {
-        'go to home': function() {
-          window.location.href = '/';
-        },
-        'go to booking':function() {
-          window.location.href='/book';
-        },
-        'go to login':function() {
-          window.location.href='/login';
-        },
-        'go to register':function() {
-          window.location.href='/register';
-        },
-        'logout': function() {
-          Window.location.href='/logout';
+<body class="d-flex flex-column vh-100">
+    <%- include('../partials/navbar') %>
+    <main class="container mt-5">
+        <%- body %>
+    </main>
+    <script>
+        // Speak Function for Voice Feedback
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            const voices = window.speechSynthesis.getVoices();
+            utterance.voice = voices.find(voice => voice.lang === 'en-US') || voices[0];
+            utterance.pitch = 1;
+            utterance.rate = 1;
+            window.speechSynthesis.speak(utterance);
         }
-      };
-    var commands = {
-        'Login name is *n': function(n) {
-            document.getElementById('username').value = n;
-            console.log("login name is set")
-            speak('Username set to ' + n);
-            console.log("next field is spoken")
-            speak("what's the password")  // Voice feedback
-        },
-        'My password is *p':function(p){
-            document.getElementById('password').value=p;
-            speak('password set');
-            speak("submit the form") 
-        },
-        'Login': function() {
-            document.getElementById('loginForm').submit();
-            speak('You are Logined Succesfully');  // Voice feedback
-        }
-    };
-    var registercommands = {
-        'set username to *name': function(name) {
-            document.getElementById('username').value = name;
-            console.log(name);
-            speak('Username set to ' + name);  // Voice feedback
-        },
-        'set email to *email': function(email) {
-            document.getElementById('email').value = email;
-            speak('Email set to ' + email);  // Voice feedback
-        },
-        'set password to *password': function(password) {
-            document.getElementById('password').value = password;
-            speak('Password set to ' + password);  // Voice feedback
-        },
-        'submit registration form': function() {
-            document.getElementById('registerForm').submit();
-            speak('Registration form submitted');  // Voice feedback
-        }
-    };
-    const bookingCommands = {
-        'set from station to *fromStation': function(fromStation) {
-            const standardizedFrom = stationMapping[fromStation.toLowerCase()];
-            if (standardizedFrom) {
-                document.getElementById('from').value = standardizedFrom;
-                speak(`From station set to ${standardizedFrom}`);
-            } else {
-                speak(`Sorry, I did not recognize the station "${fromStation}". Please specify again.`);
+
+        // Helper function to parse the spoken date into YYYY-MM-DD format
+        function parseDate(spokenDate) {
+            try {
+                const date = new Date(spokenDate); // Let the browser parse the date
+                if (!isNaN(date)) {
+                    // Format the date as YYYY-MM-DD
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+                    const day = String(date.getDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                } else {
+                    return null; // Invalid date
+                }
+            } catch (error) {
+                return null; // Fallback for parsing errors
             }
-        },
-        'set destination to *toStation': function(toStation) {
-            const standardizedTo = stationMapping[toStation.toLowerCase()];
-            if (standardizedTo) {
-                document.getElementById('to').value = standardizedTo;
-                speak(`To station set to ${standardizedTo}`);
-            } else {
-                speak(`Sorry, I did not recognize the station "${toStation}". Please specify again.`);
-            }
-        },
-        'set date to *date': function(date) {
-            document.getElementById('date').value = date;
-            speak(`Date set to ${date}`);
-        },
-        'set class preference to *preference': function(preference) {
+        }
+
+        // Initialize Annyang and Commands
+        if (annyang) {
+            console.log("Annyang is supported");
+
+            // Station and Class Mapping
+            const stationMapping = {
+                'bhopal': 'BHOPAL JN',
+                'indore': 'INDORE JN',
+                'jabalpur': 'JABALPUR',
+                // Add more stations as needed
+            };
             const classMapping = {
                 'first AC': '1A',
                 'second AC': '2A',
@@ -123,32 +63,169 @@ if (annyang) {
                 'chair car': 'CC',
                 'all classes': ''
             };
-            document.getElementById('preference').value = classMapping[preference.toLowerCase()] || '';
-            speak(`Class preference set to ${preference}`);
-        },
-        'submit booking form': function() {
-            document.querySelector('form').submit();
-            speak('Booking form submitted');
+
+            // Navigation Commands
+            const navigationCommands = {
+                'go to home': () => {
+                    window.location.href = '/';
+                },
+                'go to booking': () => {
+                    window.location.href = '/book';
+                },
+                'go to login': () => {
+                    window.location.href = '/login';
+                },
+                'go to register': () => {
+                    window.location.href = '/register';
+                },
+                'logout': () => {
+                    window.location.href = '/logout';console.log("Annyang is supported");
+console.log("Station and Class Mapping initialized");
+console.log("Navigation Commands initialized");
+console.log("Login Commands initialized");
+console.log("Registration Commands initialized");
+console.log("Booking Commands initialized");
+console.log("All Commands added to Annyang");
+console.log("Annyang started listening");
+console.log("On Page Load, Instructions provided");
+
+annyang.addCallback('result', (userSaid, commandText, languages) => {
+    console.log("User said:", userSaid);
+    console.log("Command Text:", commandText);
+    console.log("Languages:", languages);
+});
+
+annyang.addCallback('error', (error) => {
+    console.error("Annyang error:", error);
+});
+
+annyang.addCallback('start', () => {
+    console.log("Annyang started listening");
+});
+
+annyang.addCallback('end', () => {
+    console.log("Annyang stopped listening");
+});
+
+annyang.addCallback('soundstart', () => {
+    console.log("Sound started playing");
+});
+
+annyang.addCallback('soundend', () => {
+    console.log("Sound stopped playing");
+});
+
+annyang.addCallback('resultMatch', (commandText, languages, phrases) => {
+    console.log("Result Match:", commandText, languages, phrases);
+});
+
+annyang.addCallback('resultNoMatch', (userSaid, languages) => {
+    console.log("Result No Match:", userSaid, languages);
+});
+                }
+            };
+
+            // Login Commands
+            const loginCommands = {
+                'Login name is *n': (n) => {
+                    const username = name.toLowerCase();
+        document.getElementById('username').value = username;
+                    speak(`Username set to ${n}. What's the password?`);
+                },
+                'My password is *p': (p) => {
+                    document.getElementById('password').value = p;
+                    speak('Password set. You can now submit the form.');
+                },
+                'Login': () => {
+                    document.getElementById('loginForm').submit();
+                    speak('You are logged in successfully.');
+                }
+            };
+
+            // Registration Commands
+            const registerCommands = {
+                'set username to *name': (name) => {
+                    document.getElementById('username').value = name;
+                    speak(`Username set to ${name}.`);
+                },
+                'set email to *email': (email) => {
+                    document.getElementById('email').value = email;
+                    speak(`Email set to ${email}.`);
+                },
+                'set password to *password': (password) => {
+                    document.getElementById('password').value = password;
+                    speak(`Password set to ${password}.`);
+                },
+                'submit registration form': () => {
+                    document.getElementById('registerForm').submit();
+                    speak('Registration form submitted.');
+                }
+            };
+
+            // Booking Commands
+            const bookingCommands = {
+                'set from station to *fromStation': (fromStation) => {
+                    const standardizedFrom = stationMapping[fromStation.toLowerCase()];
+                    if (standardizedFrom) {
+                        document.getElementById('from').value = standardizedFrom;
+                        speak(`From station set to ${standardizedFrom}.`);
+                    } else {
+                        speak(`I did not recognize the station "${fromStation}". Please specify again.`);
+                    }
+                },
+                'set destination to *toStation': (toStation) => {
+                    const standardizedTo = stationMapping[toStation.toLowerCase()];
+                    if (standardizedTo) {
+                        document.getElementById('to').value = standardizedTo;
+                        speak(`To station set to ${standardizedTo}.`);
+                    } else {
+                        speak(`I did not recognize the station "${toStation}". Please specify again.`);
+                    }
+                },
+                'set date to *date': (date) => {
+                    const parsedDate = parseDate(date);
+                    if (parsedDate) {
+                        document.getElementById('date').value = parsedDate;
+                        speak(`Date set to ${parsedDate}.`);
+                    } else {
+                        speak(`Sorry, I couldn't recognize the date "${date}". Please try again.`);
+                    }
+                },
+                'set class preference to *preference': (preference) => {
+                    const standardizedClass = classMapping[preference.toLowerCase()] || '';
+                    document.getElementById('preference').value = standardizedClass;
+                    speak(`Class preference set to ${preference}.`);
+                },
+                'submit booking form': () => {
+                    document.querySelector('form').submit();
+                    speak('Booking form submitted.');
+                }
+            };
+
+            // Add All Commands
+            annyang.addCommands(navigationCommands);
+            annyang.addCommands(loginCommands);
+            annyang.addCommands(registerCommands);
+            annyang.addCommands(bookingCommands);
+
+            // Start Listening
+            annyang.start();
+
+            // On Page Load, Provide Instructions
+            window.onload = () => {
+                const path = window.location.pathname;
+                if (path === '/login') {
+                    speak("Login page loaded. What is your login name?");
+                } else if (path === '/register') {
+                    speak("Registration page loaded. What is your username?");
+                } else if (path === '/book') {
+                    speak("Booking page loaded. Please provide the required details.");
+                }
+            };
+        } else {
+            console.error('Annyang is not supported in this browser.');
         }
-    };
-    annyang.addCommands(commands);
-    annyang.addCommands(navigationCommands);
-    annyang.addCommands(registercommands);
-    annyang.addCommands(bookingCommands);
-    annyang.start();
-    window.onload = () => { 
-        const path = window.location.pathname;
-        if (path === '/login') {
-            console.log("Login page is loaded");
-            speak("What is your login name?");
-        } else if (path === '/register') {
-            console.log("Register page is loaded");
-            speak("What is your username?");
-        }
-    };
-} else {
-console.log('annyang not supported in this browser');
-}
     </script>
 </body>
+
 </html>
