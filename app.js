@@ -1,6 +1,6 @@
-if (process.env.NODE_ENV !== "production") {
-    require('dotenv').config();
-}
+// if (process.env.NODE_ENV !== "production") {
+//     require('dotenv').config();
+// }
 
 const express = require('express');
 const app = express();
@@ -24,8 +24,8 @@ const BookingRoutes = require('./routes/book');
 const { isLoggedIn } = require('./middleware');
 const Train = require('./models/train');
 const MongoDBStore = require("connect-mongo");
-const dbUrl = process.env.DB_URL;
-mongoose.connect(dbUrl, { ssl: true,tlsInsecure: true});
+const dbUrl ='mongodb://127.0.0.1:27017/voiceoperation';
+// mongoose.connect(dbUrl, { ssl: true,tlsInsecure: true});
 
 mongoose.connect(dbUrl);
 
@@ -189,7 +189,7 @@ app.get('/book', isLoggedIn, (req, res) => {
 });
 
 app.use('/', userRoutes);
-const Port = process.env.PORT || 3000;
+const Port = process.env.PORT || 7000;
 app.listen(Port, () => {
     console.log(`Serving on port ${Port}`)
 })
