@@ -16,6 +16,7 @@
                     <th>Duration</th>
                     <th>Class</th>
                     <th>Distance (km)</th>
+                    <th>Prices</th> <!-- New column for prices -->
                 </tr>
             </thead>
             <tbody>
@@ -30,6 +31,11 @@
                         <td><%= train.properties.duration_h %>h <%= train.properties.duration_m %>m</td>
                         <td><%= train.properties.classes || 'N/A' %></td>
                         <td><%= train.properties.distance %></td>
+                        <td>
+                            <% Object.entries(train.properties.prices).forEach(([classType, price]) => { %>
+                                <%= classType %>: ₹<%= price %><br>
+                            <% }) %>
+                        </td>
                     </tr>
                 <% }); %>
             </tbody>

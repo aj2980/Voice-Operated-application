@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Payment Page</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+  <div class="container mt-5">
+    <h2>Confirm and Pay</h2>
+    <p><strong>Train:</strong> <%= train.properties.name %> (<%= train.properties.number %>)</p>
+    <p><strong>From:</strong> <%= train.properties.from_station_name %></p>
+    <p><strong>To:</strong> <%= train.properties.to_station_name %></p>
+    <p><strong>Departure:</strong> <%= train.properties.departure %></p>
+    <p><strong>Arrival:</strong> <%= train.properties.arrival %></p>
+
+    <h5 class="mt-3">Available Prices:</h5>
+    <ul>
+      <% for (const [cls, price] of Object.entries(train.properties.prices || {})) { %>
+        <li><%= cls %>: ₹<%= price %></li>
+      <% } %>
+    </ul>
+
+    <form id="paymentForm" action="/makePayment" method="POST">
+      <input type="hidden" name="trainNumber" value="<%= train.properties.number %>">
+      <div class="mb-3">
+        <label for="upi" class="form-label">Enter your UPI ID:</label>
+        <input type="text" class="form-control" name="upi" id="upi" required>
+      </div>
+      <button type="submit" class="btn btn-primary mt-2">Proceed to Pay</button>
+    </form>
+  </div>
+
+  <script>
+    function speak(text, callback) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.onend = callback;
+      speechSynthesis.speak(utterance);
+    }
+
+    function getUPIFromUser() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        speak("Speech recognition is not supported in your browser.");
+        return;
+      }
+
+      speak("Please say your UPI ID after the beep.", () => {
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'en-IN';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+        recognition.start();
+
+        recognition.onresult = (event) => {
+          const upi = event.results[0][0].transcript.trim().toLowerCase().replace(/\s/g, '');
+          document.getElementById("upi").value = upi;
+          speak(`You said ${upi}. Proceeding with payment.`);
+        };
+
+        recognition.onerror = () => {
+          speak("Sorry, I could not understand. Please try again.");
+        };
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      speak("You are on the payment page. I will now read out the prices.", () => {
+        const prices = <%- JSON.stringify(train.properties.prices || {}) %>;
+        const priceText = Object.entries(prices).map(([k, v]) => `${k} class is ₹${v}`).join(', ');
+        speak(priceText, () => {
+          getUPIFromUser();
+        });
+      });
+    });
+  </script>
+</body>
+</html>

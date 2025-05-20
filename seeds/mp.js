@@ -1,3 +1,4 @@
+
 const mpTrainsData = [
   {
     geometry: {
@@ -29,6 +30,10 @@ const mpTrainsData = [
       type: "EXPRESS",
       first_ac: 0,
       distance: 255,
+      prices: {
+        "2A": 750,
+        SL: 150,
+      },
     },
   },
   {
@@ -61,6 +66,10 @@ const mpTrainsData = [
       type: "PASSENGER",
       first_ac: 0,
       distance: 145,
+      prices: {
+        "3A": 500,
+        SL: 100,
+      },
     },
   },
   {
@@ -93,6 +102,10 @@ const mpTrainsData = [
       type: "EXPRESS",
       first_ac: 0,
       distance: 255,
+      prices: {
+        "2A": 750,
+        CC: 300,
+      },
     },
   },
   {
@@ -125,6 +138,9 @@ const mpTrainsData = [
       type: "PASSENGER",
       first_ac: 0,
       distance: 120,
+      prices: {
+        SL: 80,
+      },
     },
   },
   {
@@ -157,6 +173,11 @@ const mpTrainsData = [
       type: "EXPRESS",
       first_ac: 0,
       distance: 182,
+      prices: {
+        "2A": 600,
+        "3A": 400,
+        SL: 150,
+      },
     },
   },
   {
@@ -189,6 +210,9 @@ const mpTrainsData = [
       type: "PASSENGER",
       first_ac: 0,
       distance: 90,
+      prices: {
+        SL: 50,
+      },
     },
   },
   {
@@ -221,6 +245,9 @@ const mpTrainsData = [
       type: "PASSENGER",
       first_ac: 0,
       distance: 65,
+      prices: {
+        SL: 40,
+      },
     },
   },
   {
@@ -253,6 +280,9 @@ const mpTrainsData = [
       type: "PASSENGER",
       first_ac: 0,
       distance: 25,
+      prices: {
+        SL: 20,
+      },
     },
   },
   {
@@ -285,6 +315,9 @@ const mpTrainsData = [
       type: "PASSENGER",
       first_ac: 0,
       distance: 50,
+      prices: {
+        SL: 30,
+      },
     },
   },
   {
@@ -292,7 +325,7 @@ const mpTrainsData = [
       type: "LineString",
       coordinates: [
         [75.85034, 23.25949], // Bhopal Junction
-        [77.3318, 23.3826],   // Sagar Junction
+        [77.3318, 23.3826], // Sagar Junction
       ],
     },
     properties: {
@@ -317,6 +350,11 @@ const mpTrainsData = [
       type: "EXPRESS",
       first_ac: 0,
       distance: 200,
+      prices: {
+        "2A": 700,
+        "3A": 500,
+        SL: 150,
+      },
     },
   },
   {
@@ -349,6 +387,10 @@ const mpTrainsData = [
       type: "EXPRESS",
       first_ac: 0,
       distance: 120,
+      prices: {
+        "2A": 600,
+        SL: 100,
+      },
     },
   },
   {
@@ -381,6 +423,9 @@ const mpTrainsData = [
       type: "PASSENGER",
       first_ac: 0,
       distance: 80,
+      prices: {
+        SL: 50,
+      },
     },
   },
   {
@@ -413,6 +458,11 @@ const mpTrainsData = [
       type: "EXPRESS",
       first_ac: 0,
       distance: 98,
+      prices: {
+        "2A": 500,
+        "3A": 350,
+        SL: 120,
+      },
     },
   },
   {
@@ -445,6 +495,9 @@ const mpTrainsData = [
       type: "PASSENGER",
       first_ac: 0,
       distance: 105,
+      prices: {
+        SL: 70,
+      },
     },
   },
   {
@@ -477,6 +530,10 @@ const mpTrainsData = [
       type: "EXPRESS",
       first_ac: 0,
       distance: 235,
+      prices: {
+        "2A": 800,
+        SL: 200,
+      },
     },
   },
   {
@@ -509,6 +566,10 @@ const mpTrainsData = [
       type: "JANSHATABDI",
       first_ac: 0,
       distance: 310,
+      prices: {
+        CC: 400,
+        SL: 150,
+      },
     },
   },
   {
@@ -541,6 +602,11 @@ const mpTrainsData = [
       type: "EXPRESS",
       first_ac: 0,
       distance: 552,
+      prices: {
+        "2A": 1000,
+        "3A": 700,
+        SL: 250,
+      },
     },
   },
   {
@@ -573,6 +639,9 @@ const mpTrainsData = [
       type: "PASSENGER",
       first_ac: 0,
       distance: 135,
+      prices: {
+        SL: 90,
+      },
     },
   },
   {
@@ -605,6 +674,10 @@ const mpTrainsData = [
       type: "INTERCITY",
       first_ac: 0,
       distance: 55,
+      prices: {
+        CC: 150,
+        SL: 50,
+      },
     },
   },
   {
@@ -637,297 +710,9 @@ const mpTrainsData = [
       type: "MEMU",
       first_ac: 0,
       distance: 76,
-    },
-  },
-  
-  // Additional Trains Outside MP
-  
-  {
-    geometry: {
-      type: "LineString",
-      coordinates: [
-        [85.309562, 23.340187], // Dhanbad Junction, Jharkhand
-        [88.363895, 22.572646], // Howrah Junction, West Bengal
-      ],
-    },
-    properties: {
-      third_ac: 1,
-      arrival: "11:25:00",
-      from_station_code: "DHN",
-      name: "Dhanbad - Howrah Black Diamond Express",
-      zone: "ER",
-      chair_car: 1,
-      first_class: 0,
-      duration_m: 30,
-      sleeper: 1,
-      from_station_name: "DHANBAD JN",
-      number: "22387",
-      departure: "07:10:00",
-      return_train: "22388",
-      to_station_code: "HWH",
-      second_ac: 1,
-      classes: "CC, 2A, SL",
-      to_station_name: "HOWRAH JN",
-      duration_h: 4,
-      type: "EXPRESS",
-      first_ac: 0,
-      distance: 272,
-    },
-  },
-  {
-    geometry: {
-      type: "LineString",
-      coordinates: [
-        [85.321477, 23.345089], // Ranchi Junction, Jharkhand
-        [85.538373, 23.614851], // Hatia Junction, Jharkhand
-      ],
-    },
-    properties: {
-      third_ac: 1,
-      arrival: "13:30:00",
-      from_station_code: "RNC",
-      name: "Ranchi - Hatia Passenger",
-      zone: "SER",
-      chair_car: 0,
-      first_class: 0,
-      duration_m: 20,
-      sleeper: 1,
-      from_station_name: "RANCHI JN",
-      number: "58161",
-      departure: "12:30:00",
-      return_train: "58162",
-      to_station_code: "HTE",
-      second_ac: 0,
-      classes: "SL",
-      to_station_name: "HATIA JN",
-      duration_h: 1,
-      type: "PASSENGER",
-      first_ac: 0,
-      distance: 45,
-    },
-  },
-  {
-    geometry: {
-      type: "LineString",
-      coordinates: [
-        [78.111115, 26.217017], // Gwalior Junction, Madhya Pradesh
-        [77.412794, 28.613895], // New Delhi Junction, Delhi
-      ],
-    },
-    properties: {
-      third_ac: 1,
-      arrival: "05:30:00",
-      from_station_code: "GWL",
-      name: "Gwalior - New Delhi Shatabdi Express",
-      zone: "NR",
-      chair_car: 1,
-      first_class: 1,
-      duration_m: 0,
-      sleeper: 0,
-      from_station_name: "GWALIOR JN",
-      number: "12001",
-      departure: "15:15:00",
-      return_train: "12002",
-      to_station_code: "NDLS",
-      second_ac: 0,
-      classes: "CC, FC",
-      to_station_name: "NEW DELHI",
-      duration_h: 3,
-      type: "SHATABDI",
-      first_ac: 0,
-      distance: 315,
-    },
-  },
-  {
-    geometry: {
-      type: "LineString",
-      coordinates: [
-        [88.363895, 22.572646], // Howrah Junction, West Bengal
-        [77.594566, 12.971599], // Bangalore Junction, Karnataka
-      ],
-    },
-    properties: {
-      third_ac: 1,
-      arrival: "08:00:00",
-      from_station_code: "HWH",
-      name: "Howrah - Bangalore Duronto Express",
-      zone: "SER",
-      chair_car: 0,
-      first_class: 1,
-      duration_m: 45,
-      sleeper: 1,
-      from_station_name: "HOWRAH JN",
-      number: "12245",
-      departure: "16:50:00",
-      return_train: "12246",
-      to_station_code: "SBC",
-      second_ac: 1,
-      classes: "1A, 2A, 3A",
-      to_station_name: "BANGALORE CITY JN",
-      duration_h: 29,
-      type: "DURONTO",
-      first_ac: 1,
-      distance: 1961,
-    },
-  },
-  {
-    geometry: {
-      type: "LineString",
-      coordinates: [
-        [73.856255, 18.516726], // Pune Junction, Maharashtra
-        [72.877656, 19.076090], // Mumbai CST, Maharashtra
-      ],
-    },
-    properties: {
-      third_ac: 0,
-      arrival: "09:15:00",
-      from_station_code: "PUNE",
-      name: "Pune - Mumbai Deccan Queen",
-      zone: "CR",
-      chair_car: 1,
-      first_class: 0,
-      duration_m: 30,
-      sleeper: 0,
-      from_station_name: "PUNE JN",
-      number: "12123",
-      departure: "07:10:00",
-      return_train: "12124",
-      to_station_code: "CSTM",
-      second_ac: 0,
-      classes: "CC",
-      to_station_name: "MUMBAI CST",
-      duration_h: 2,
-      type: "INTERCITY",
-      first_ac: 0,
-      distance: 192,
-    },
-  },
-  {
-    geometry: {
-      type: "LineString",
-      coordinates: [
-        [72.877656, 19.076090], // Mumbai CST, Maharashtra
-        [77.594566, 12.971599], // Bangalore Junction, Karnataka
-      ],
-    },
-    properties: {
-      third_ac: 1,
-      arrival: "08:30:00",
-      from_station_code: "CSTM",
-      name: "Mumbai - Bangalore Udyan Express",
-      zone: "CR",
-      chair_car: 0,
-      first_class: 1,
-      duration_m: 20,
-      sleeper: 1,
-      from_station_name: "MUMBAI CST",
-      number: "11301",
-      departure: "20:10:00",
-      return_train: "11302",
-      to_station_code: "SBC",
-      second_ac: 1,
-      classes: "1A, 2A, 3A, SL",
-      to_station_name: "BANGALORE CITY JN",
-      duration_h: 16,
-      type: "EXPRESS",
-      first_ac: 0,
-      distance: 984,
-    },
-  },
-  {
-    geometry: {
-      type: "LineString",
-      coordinates: [
-        [77.216721, 28.644800], // New Delhi Junction, Delhi
-        [88.363895, 22.572646], // Howrah Junction, West Bengal
-      ],
-    },
-    properties: {
-      third_ac: 1,
-      arrival: "17:15:00",
-      from_station_code: "NDLS",
-      name: "New Delhi - Howrah Rajdhani",
-      zone: "ER",
-      chair_car: 0,
-      first_class: 1,
-      duration_m: 0,
-      sleeper: 0,
-      from_station_name: "NEW DELHI",
-      number: "12302",
-      departure: "07:10:00",
-      return_train: "12301",
-      to_station_code: "HWH",
-      second_ac: 1,
-      classes: "1A, 2A, 3A",
-      to_station_name: "HOWRAH JN",
-      duration_h: 10,
-      type: "RAJDHANI",
-      first_ac: 1,
-      distance: 1447,
-    },
-  },
-  {
-    geometry: {
-      type: "LineString",
-      coordinates: [
-        [85.309562, 23.340187], // Dhanbad Junction, Jharkhand
-        [88.363895, 22.572646], // Howrah Junction, West Bengal
-      ],
-    },
-    properties: {
-      third_ac: 1,
-      arrival: "11:25:00",
-      from_station_code: "DHN",
-      name: "Dhanbad - Howrah Black Diamond Express",
-      zone: "ER",
-      chair_car: 1,
-      first_class: 0,
-      duration_m: 30,
-      sleeper: 1,
-      from_station_name: "DHANBAD JN",
-      number: "22387",
-      departure: "07:10:00",
-      return_train: "22388",
-      to_station_code: "HWH",
-      second_ac: 1,
-      classes: "CC, 2A, SL",
-      to_station_name: "HOWRAH JN",
-      duration_h: 4,
-      type: "EXPRESS",
-      first_ac: 0,
-      distance: 272,
-    },
-  },
-  {
-    geometry: {
-      type: "LineString",
-      coordinates: [
-        [76.358558, 31.589227], // Ambala Cantt Junction, Haryana
-        [75.839995, 30.902066], // Ludhiana Junction, Punjab
-      ],
-    },
-    properties: {
-      third_ac: 1,
-      arrival: "15:20:00",
-      from_station_code: "UMB",
-      name: "Ambala - Ludhiana Passenger",
-      zone: "NR",
-      chair_car: 0,
-      first_class: 0,
-      duration_m: 45,
-      sleeper: 1,
-      from_station_name: "AMBALA CANTT",
-      number: "54553",
-      departure: "13:00:00",
-      return_train: "54554",
-      to_station_code: "LDH",
-      second_ac: 0,
-      classes: "SL",
-      to_station_name: "LUDHIANA JN",
-      duration_h: 2,
-      type: "PASSENGER",
-      first_ac: 0,
-      distance: 85,
+      prices: {
+        SL: 40,
+      },
     },
   },
   {
@@ -960,6 +745,11 @@ const mpTrainsData = [
       type: "EXPRESS",
       first_ac: 0,
       distance: 560,
+      prices: {
+        "3A": 800,
+        CC: 400,
+        SL: 300,
+      },
     },
   },
   {
@@ -992,6 +782,12 @@ const mpTrainsData = [
       type: "SUPERFAST",
       first_ac: 0,
       distance: 585,
+      prices: {
+        "2A": 1200,
+        "3A": 900,
+        CC: 500,
+        SL: 350,
+      },
     },
   },
   {
@@ -1024,171 +820,11 @@ const mpTrainsData = [
       type: "PASSENGER",
       first_ac: 0,
       distance: 90,
-    },
-  },
-
-  // Additional trains from other states
-  {
-    geometry: {
-      type: "LineString",
-      coordinates: [
-        [85.309562, 23.340187], // Dhanbad Junction, Jharkhand
-        [78.000053, 27.176670], // Agra Fort, UP
-      ],
-    },
-    properties: {
-      third_ac: 1,
-      arrival: "20:00:00",
-      from_station_code: "DHN",
-      name: "Dhanbad - Agra Express",
-      zone: "ER",
-      chair_car: 1,
-      first_class: 0,
-      duration_m: 45,
-      sleeper: 1,
-      from_station_name: "DHANBAD JN",
-      number: "13308",
-      departure: "08:00:00",
-      return_train: "13307",
-      to_station_code: "AF",
-      second_ac: 1,
-      classes: "SL, 3A, CC",
-      to_station_name: "AGRA FORT",
-      duration_h: 12,
-      type: "EXPRESS",
-      first_ac: 0,
-      distance: 950,
-    },
-  },
-  {
-    geometry: {
-      type: "LineString",
-      coordinates: [
-        [72.836550, 18.932233], // Mumbai Central, Maharashtra
-        [77.594563, 12.971599], // Bangalore City, Karnataka
-      ],
-    },
-    properties: {
-      third_ac: 1,
-      arrival: "06:15:00",
-      from_station_code: "BCT",
-      name: "Mumbai - Bangalore Udyan Express",
-      zone: "CR",
-      chair_car: 0,
-      first_class: 1,
-      duration_m: 50,
-      sleeper: 1,
-      from_station_name: "MUMBAI CENTRAL",
-      number: "11301",
-      departure: "20:30:00",
-      return_train: "11302",
-      to_station_code: "SBC",
-      second_ac: 1,
-      classes: "1A, 2A, 3A, SL",
-      to_station_name: "BANGALORE CITY",
-      duration_h: 34,
-      type: "EXPRESS",
-      first_ac: 1,
-      distance: 1100,
-    },
-  },
-  {
-    geometry: {
-      type: "LineString",
-      coordinates: [
-        [78.032188, 30.316495], // Dehradun, Uttarakhand
-        [88.363895, 22.572646], // Howrah, West Bengal
-      ],
-    },
-    properties: {
-      third_ac: 1,
-      arrival: "04:50:00",
-      from_station_code: "DDN",
-      name: "Dehradun - Howrah Express",
-      zone: "ER",
-      chair_car: 0,
-      first_class: 0,
-      duration_m: 20,
-      sleeper: 1,
-      from_station_name: "DEHRADUN",
-      number: "13010",
-      departure: "14:50:00",
-      return_train: "13009",
-      to_station_code: "HWH",
-      second_ac: 1,
-      classes: "SL, 2A, 3A",
-      to_station_name: "HOWRAH JN",
-      duration_h: 38,
-      type: "EXPRESS",
-      first_ac: 0,
-      distance: 1587,
-    },
-  },
-  {
-    geometry: {
-      type: "LineString",
-      coordinates: [
-        [73.847784, 18.530174], // Pune Junction, Maharashtra
-        [80.949208, 26.846708], // Lucknow Junction, UP
-      ],
-    },
-    properties: {
-      third_ac: 1,
-      arrival: "12:45:00",
-      from_station_code: "PUNE",
-      name: "Pune - Lucknow Express",
-      zone: "CR",
-      chair_car: 0,
-      first_class: 0,
-      duration_m: 15,
-      sleeper: 1,
-      from_station_name: "PUNE JN",
-      number: "12103",
-      departure: "17:00:00",
-      return_train: "12104",
-      to_station_code: "LKO",
-      second_ac: 1,
-      classes: "SL, 3A, 2A",
-      to_station_name: "LUCKNOW JN",
-      duration_h: 19,
-      type: "SUPERFAST",
-      first_ac: 0,
-      distance: 1452,
-    },
-  },
-  {
-    geometry: {
-      type: "LineString",
-      coordinates: [
-        [92.717639, 25.570492], // Guwahati, Assam
-        [88.363895, 22.572646], // Howrah, West Bengal
-      ],
-    },
-    properties: {
-      third_ac: 1,
-      arrival: "04:00:00",
-      from_station_code: "GHY",
-      name: "Guwahati - Howrah Saraighat Express",
-      zone: "NFR",
-      chair_car: 0,
-      first_class: 0,
-      duration_m: 0,
-      sleeper: 1,
-      from_station_name: "GUWAHATI",
-      number: "12346",
-      departure: "12:30:00",
-      return_train: "12345",
-      to_station_code: "HWH",
-      second_ac: 1,
-      classes: "SL, 2A, 3A",
-      to_station_name: "HOWRAH JN",
-      duration_h: 16,
-      type: "EXPRESS",
-      first_ac: 0,
-      distance: 1000,
+      prices: {
+        SL: 60,
+      },
     },
   },
 ];
-  
+
 module.exports = mpTrainsData;
-  

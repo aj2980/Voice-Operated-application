@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Available Trains</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheet/details.css">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <h2 class="mb-4">Available Trains</h2>
+        <p>
+            <strong>From:</strong> <%= search.from %> &nbsp;
+            <strong>To:</strong> <%= search.to %> &nbsp;
+            <strong>Date:</strong> <%= search.date %> &nbsp;
+            <strong>Class:</strong> <%= search.preference || 'Any' %>
+        </p>
+        <% if (trains.length === 0) { %>
+            <div class="alert alert-warning">No trains found for your search criteria.</div>
+        <% } else { %>
+            <table class="table table-bordered table-striped" id="trains-table">
+                <thead>
+                    <tr>
+                        <th>Train Number</th>
+                        <th>Name</th>
+                        <th>From</th>
+                        <th>Departure</th>
+                        <th>To</th>
+                        <th>Arrival</th>
+                        <th>Classes</th>
+                        <th>Type</th>
+                        <th>Duration (h:m)</th>
+                        <th>Distance (km)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% trains.forEach(train => { %>
+                        <tr>
+                            <td><%= train.properties.number %></td>
+                            <td><%= train.properties.name %></td>
+                            <td><%= train.properties.from_station_name %></td>
+                            <td><%= train.properties.departure %></td>
+                            <td><%= train.properties.to_station_name %></td>
+                            <td><%= train.properties.arrival %></td>
+                            <td><%= train.properties.classes %></td>
+                            <td><%= train.properties.type %></td>
+                            <td><%= train.properties.duration_h %>:<%= train.properties.duration_m %></td>
+                            <td><%= train.properties.distance %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        <% } %>
+        <a href="/book" class="btn btn-secondary mt-3">Back to Search</a>
+    </div>
+    <script>
+const trains = <%- JSON.stringify(trains) %>;
+
+function speak(text, callback) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.onend = callback;
+    window.speechSynthesis.speak(utterance);
+}
+
+function confirmPayment(trainNumber) {
+    speak(`You selected train number ${trainNumber}. Do you want to proceed to payment? Say yes to continue.`, () => {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+        recognition.start();
+
+        recognition.onresult = function(event) {
+            const confirmation = event.results[0][0].transcript.trim().toLowerCase();
+            if (confirmation.includes('yes')) {
+                // Redirect to payment page with query params or via POST
+                window.location.href = `/payment?trainNumber=${trainNumber}`;
+            } else {
+                speak("Okay, not proceeding to payment.");
+            }
+        };
+
+        recognition.onerror = function() {
+            speak("Sorry, I didn't catch that. Please say yes if you want to continue.");
+        };
+    });
+}
+
+function startRecognition(trainNames, trainNumbers) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        alert('Speech recognition not supported in this browser.');
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+    recognition.start();
+
+    recognition.onresult = function(event) {
+        const userSaid = event.results[0][0].transcript.trim().toLowerCase().replace(/[^a-z0-9 ]/g, '');
+
+        const foundNumber = trainNumbers.find(num => userSaid.includes(num.toLowerCase()));
+        if (foundNumber) {
+            confirmPayment(foundNumber);
+            return;
+        }
+
+        const foundName = trainNames.find(name => {
+            const normalized = name.toLowerCase().replace(/[^a-z0-9 ]/g, '');
+            return userSaid.includes(normalized) || normalized.includes(userSaid);
+        });
+
+        if (foundName) {
+            const train = trains.find(t => t.properties.name === foundName);
+            confirmPayment(train.properties.number);
+        } else {
+            speak("Sorry, I didn't catch that. Please say the train name or number again.", () => {
+                startRecognition(trainNames, trainNumbers);
+            });
+        }
+    };
+
+    recognition.onerror = function() {
+        speak("Sorry, I didn't catch that. Please say the train name or number again.", () => {
+            startRecognition(trainNames, trainNumbers);
+        });
+    };
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    let idx = 0;
+    function speakNext() {
+        if (idx < trains.length) {
+            const t = trains[idx].properties;
+            const priceDetails = Object.entries(t.prices || {})
+                .map(([classType, price]) => `${classType}: ₹${price}`)
+                .join(', ');
+            const details = `Train number ${t.number}, ${t.name}, from ${t.from_station_name} at ${t.departure}, to ${t.to_station_name} at ${t.arrival}, classes available: ${t.classes}, type: ${t.type}, duration: ${t.duration_h} hours ${t.duration_m} minutes, distance: ${t.distance} kilometers. ${priceDetails ? 'Prices are: ' + priceDetails : ''}`;
+            speak(details, () => {
+                idx++;
+                speakNext();
+            });
+        } else {
+            speak('Which train do you want to select? Please say the train name or train number.', () => {
+                const trainNames = trains.map(t => t.properties.name);
+                const trainNumbers = trains.map(t => t.properties.number);
+                startRecognition(trainNames, trainNumbers);
+            });
+        }
+    }
+    speakNext();
+});
+</script>
+
+</body>
+</html>

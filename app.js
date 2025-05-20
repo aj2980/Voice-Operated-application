@@ -130,18 +130,17 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
-app.post('/book', async (req, res) => {
-    try {
-        const { to, from, date } = req.body;
-        const trains = await Train.find({
-            'properties.from_station_name': from,
-            'properties.to_station_name': to,
-        });
-        res.render('train/details', { trains, date });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Server Error');
-    }
+const mpTrainsData = require('./seeds/mp'); // adjust path if needed
+
+app.post('/book', (req, res) => {
+    const { to, from, date, preference } = req.body;
+    const trains = mpTrainsData.filter(train => {
+        const matchesFrom = train.properties.from_station_name === from;
+        const matchesTo = train.properties.to_station_name === to;
+        const matchesClass = !preference || train.properties.classes.split(',').map(c => c.trim()).includes(preference);
+        return matchesFrom && matchesTo && matchesClass;
+    });
+    res.render('bookResults', { trains, search: { from, to, date, preference } });
 });
 
 // Handle file uploads and interact with Flask
@@ -193,3 +192,15 @@ const Port = process.env.PORT || 7000;
 app.listen(Port, () => {
     console.log(`Serving on port ${Port}`)
 })
+
+
+app.get('/payment', (req, res) => {
+    const { trainNumber } = req.query;
+    const selectedTrain = mpTrainsData.find(train => train.properties.number === trainNumber);
+
+    if (!selectedTrain) {
+        return res.status(404).send('Train not found');
+    }
+
+    res.render('paymentPage', { train: selectedTrain });
+});
